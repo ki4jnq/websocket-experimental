@@ -1,3 +1,8 @@
+require 'faye/websocket'
+require 'eventmachine'
+require 'json'
+require './app/message_handler'
+
 class App
   def call(env)
     if Faye::WebSocket.websocket? env
@@ -19,7 +24,7 @@ class App
   def message(event)
     handler = MessageHandler.new
 
-    data = safe_json_parse
+    data = safe_json_parse(event.data)
 
     handler.call(data)
   end
